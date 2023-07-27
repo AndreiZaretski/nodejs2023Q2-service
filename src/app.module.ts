@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+//import { ConfigModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistsModule } from './artists/artists.module';
@@ -14,6 +15,7 @@ import { UsersModule } from './users/users.module';
     FavoritesModule,
     TracksModule,
     UsersModule,
+    //ConfigModule.forRoot({ envFilePath: '.env' }),
   ],
   controllers: [AppController],
   providers: [AppService],
