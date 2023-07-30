@@ -1,26 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { DbService } from 'src/db/db.service';
+import { User } from './entities/user.entity';
+
+export interface ReturnUser {
+  id: string;
+  login: string;
+  password?: string;
+  version: number;
+  createdAt: number;
+  updatedAt: number;
+}
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private db: DbService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const user = this.db.createUser(createUserDto);
+
+    return this.removePassword(user);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return this.db.getAllUsers().map((user) => {
+      return this.removePassword(user);
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = this.db.getUserById(id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} doesn't exist`);
+    }
+
+    return this.removePassword(user);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(updateUserDto: UpdateUserDto, id: string) {
+    const checkUser = this.db.getUserById(id);
+    if (!checkUser) {
+      throw new NotFoundException(`User with id ${id} doesn't exist`);
+    }
+
+    if (checkUser.password !== updateUserDto.oldPassword) {
+      throw new ForbiddenException('OldPassword is wrong');
+    }
+    const updateUser = this.db.updateUser(updateUserDto, id);
+    if (updateUser) {
+      return this.removePassword(updateUser);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const removeUser = this.db.deleteUser(id);
+
+    if (!removeUser) {
+      throw new NotFoundException(`User with id ${id} doesn't exist`);
+    }
+    return removeUser;
+  }
+
+  private removePassword(user: User): ReturnUser {
+    const userWithoutPassword: ReturnUser = { ...user };
+    delete userWithoutPassword.password;
+    return userWithoutPassword;
   }
 }
