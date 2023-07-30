@@ -1,4 +1,6 @@
 import { Global, Injectable } from '@nestjs/common';
+import { CreateAlbumDto } from 'src/albums/dto/create-album.dto';
+import { UpdateAlbumDto } from 'src/albums/dto/update-album.dto';
 import { Album } from 'src/albums/entities/album.entity';
 import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
 import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
@@ -105,5 +107,49 @@ export class DbService {
 
   getAlbumDb() {
     return this.albums;
+  }
+
+  getAllAlbums() {
+    return Array.from(this.albums.values());
+  }
+
+  getAlbumById(id: string) {
+    return this.albums.get(id);
+  }
+
+  createAlbum(data: CreateAlbumDto) {
+    const newAlbum: Album = {
+      id: uuidv4(),
+      name: data.name,
+      year: data.year,
+      artistId: data.artistId,
+    };
+
+    this.albums.set(newAlbum.id, newAlbum);
+    return newAlbum;
+  }
+
+  updateAlbum(data: UpdateAlbumDto, id: string) {
+    const updateAlbum = this.albums.get(id);
+
+    if (updateAlbum) {
+      // updateAlbum = {
+      //   ...updateAlbum,
+      //   name: data.name,
+      //   year: data.year,
+      //   artistId: data.artistId,
+      // };
+
+      // this.albums.set(updateAlbum.id, updateAlbum);
+
+      updateAlbum.name = data.name;
+      updateAlbum.year = data.year;
+      updateAlbum.artistId = data.artistId;
+      return updateAlbum;
+    }
+  }
+
+  deleteAlbum(id: string) {
+    return this.albums.delete(id);
   }
 }
