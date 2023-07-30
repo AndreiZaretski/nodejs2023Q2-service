@@ -6,6 +6,8 @@ import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
 import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
 import { Artist } from 'src/artists/entities/artist.entity';
 import { Favorite } from 'src/favorites/entities/favorite.entity';
+import { CreateTrackDto } from 'src/tracks/dto/create-track.dto';
+import { UpdateTrackDto } from 'src/tracks/dto/update-track.dto';
 import { Track } from 'src/tracks/entities/track.entity';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
@@ -151,5 +153,39 @@ export class DbService {
 
   deleteAlbum(id: string) {
     return this.albums.delete(id);
+  }
+
+  getAllTracks() {
+    return Array.from(this.tracks.values());
+  }
+
+  getTrackById(id: string) {
+    return this.tracks.get(id);
+  }
+
+  createTrack(data: CreateTrackDto) {
+    const newTrack: Track = {
+      ...data,
+      id: uuidv4(),
+    };
+
+    this.tracks.set(newTrack.id, newTrack);
+    return newTrack;
+  }
+
+  updateTrack(data: UpdateTrackDto, id: string) {
+    const updateTrack = this.tracks.get(id);
+
+    if (updateTrack) {
+      updateTrack.name = data.name;
+      updateTrack.artistId = data.artistId;
+      updateTrack.albumId = data.albumId;
+      updateTrack.duration = data.duration;
+      return updateTrack;
+    }
+  }
+
+  deleteTrack(id: string) {
+    return this.tracks.delete(id);
   }
 }

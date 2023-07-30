@@ -42,8 +42,8 @@ export class AlbumsService {
 
     const tracks = this.db.getTrackDb();
     tracks.forEach((item, key) => {
-      if (item.artistId === id) {
-        item.artistId = null;
+      if (item.albumId === id) {
+        item.albumId = null;
         tracks.set(key, item);
       }
     });
