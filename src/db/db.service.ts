@@ -1,5 +1,7 @@
 import { Global, Injectable } from '@nestjs/common';
 import { Album } from 'src/albums/entities/album.entity';
+import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
+import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
 import { Artist } from 'src/artists/entities/artist.entity';
 import { Favorite } from 'src/favorites/entities/favorite.entity';
 import { Track } from 'src/tracks/entities/track.entity';
@@ -15,14 +17,14 @@ export class DbService {
   albums: Map<string, Album> = new Map();
   artists: Map<string, Artist> = new Map();
   tracks: Map<string, Track> = new Map();
-  favorites: Favorite[] = [];
+  favorites: Favorite = {
+    artists: [],
+    albums: [],
+    tracks: [],
+  };
 
   getAllUsers() {
     return Array.from(this.users.values());
-    //.map((user) => {
-    //delete user.password;
-    //return user;
-    //});
   }
 
   getUserById(id: string) {
@@ -57,5 +59,51 @@ export class DbService {
 
   deleteUser(id: string) {
     return this.users.delete(id);
+  }
+
+  getAllArtists() {
+    return Array.from(this.artists.values());
+  }
+
+  getArtistById(id: string) {
+    return this.artists.get(id);
+  }
+
+  createArtist(data: CreateArtistDto) {
+    const newArtist: Artist = {
+      id: uuidv4(),
+      name: data.name,
+      grammy: data.grammy,
+    };
+
+    this.artists.set(newArtist.id, newArtist);
+    return newArtist;
+  }
+
+  updateArtist(data: UpdateArtistDto, id: string) {
+    const updateArtist = this.artists.get(id);
+
+    if (updateArtist) {
+      updateArtist.name = data.name;
+      updateArtist.grammy = data.grammy;
+
+      return updateArtist;
+    }
+  }
+
+  deleteArtist(id: string) {
+    return this.artists.delete(id);
+  }
+
+  getAllFavorites() {
+    return this.favorites;
+  }
+
+  getTrackDb() {
+    return this.tracks;
+  }
+
+  getAlbumDb() {
+    return this.albums;
   }
 }
