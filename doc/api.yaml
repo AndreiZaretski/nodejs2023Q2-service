@@ -804,11 +804,6 @@ paths:
         schema:
           type: string
           format: uuid
-      - name: album
-        in: path
-        required: true
-        schema:
-          type: string
     post:
       tags:
         - Favorites
