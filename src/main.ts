@@ -4,8 +4,6 @@ import { SwaggerModule } from '@nestjs/swagger';
 import * as yaml from 'js-yaml';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
-// import { config } from 'dotenv';
-// config();
 
 async function bootstrap() {
   const PORT = Number(process.env.PORT);
@@ -17,8 +15,7 @@ async function bootstrap() {
       'utf8',
     );
     const yamlObject: any = yaml.load(yamlFile);
-    //as Omit<OpenAPIObject, 'paths'>;
-    //const document = SwaggerModule.createDocument(app, yamlObject);
+
     SwaggerModule.setup('doc', app, yamlObject);
   } catch (e) {
     console.error(e.message);
