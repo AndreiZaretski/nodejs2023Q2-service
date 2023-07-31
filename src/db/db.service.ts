@@ -103,6 +103,10 @@ export class DbService {
     return this.favorites;
   }
 
+  getArtistDb() {
+    return this.artists;
+  }
+
   getTrackDb() {
     return this.tracks;
   }
@@ -135,15 +139,6 @@ export class DbService {
     const updateAlbum = this.albums.get(id);
 
     if (updateAlbum) {
-      // updateAlbum = {
-      //   ...updateAlbum,
-      //   name: data.name,
-      //   year: data.year,
-      //   artistId: data.artistId,
-      // };
-
-      // this.albums.set(updateAlbum.id, updateAlbum);
-
       updateAlbum.name = data.name;
       updateAlbum.year = data.year;
       updateAlbum.artistId = data.artistId;
@@ -187,5 +182,24 @@ export class DbService {
 
   deleteTrack(id: string) {
     return this.tracks.delete(id);
+  }
+
+  createFavorite(path: string, id: string) {
+    const checkFavorite = this.favorites[path + 's'].includes(id);
+
+    if (!checkFavorite) {
+      this.favorites[path + 's'].push(id);
+    }
+  }
+
+  deleteFavorite(path: string, id: string) {
+    const checkFavorite = this.favorites[path + 's'].includes(id);
+
+    if (checkFavorite) {
+      this.favorites[path + 's'] = this.favorites[path + 's'].filter(
+        (el: string) => el !== id,
+      );
+    }
+    return checkFavorite;
   }
 }
