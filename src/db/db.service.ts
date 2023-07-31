@@ -17,11 +17,11 @@ import { v4 as uuidv4 } from 'uuid';
 @Global()
 @Injectable()
 export class DbService {
-  users: Map<string, User> = new Map();
-  albums: Map<string, Album> = new Map();
-  artists: Map<string, Artist> = new Map();
-  tracks: Map<string, Track> = new Map();
-  favorites: Favorite = {
+  private users: Map<string, User> = new Map();
+  private albums: Map<string, Album> = new Map();
+  private artists: Map<string, Artist> = new Map();
+  private tracks: Map<string, Track> = new Map();
+  private favorites: Favorite = {
     artists: [],
     albums: [],
     tracks: [],

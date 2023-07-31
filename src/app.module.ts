@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-//import { ConfigModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistsModule } from './artists/artists.module';
@@ -17,7 +17,7 @@ import { DbModule } from './db/db.module';
     TracksModule,
     UsersModule,
     DbModule,
-    //ConfigModule.forRoot({ envFilePath: '.env' }),
+    ConfigModule.forRoot({ envFilePath: '.env' }),
   ],
   controllers: [AppController],
   providers: [AppService],
