@@ -185,7 +185,7 @@ export class DbService {
   }
 
   createFavorite(path: string, id: string) {
-    const checkFavorite = this.favorites[path + 's'].includes(id);
+    const checkFavorite: boolean = this.favorites[path + 's'].includes(id);
 
     if (!checkFavorite) {
       this.favorites[path + 's'].push(id);
@@ -193,7 +193,7 @@ export class DbService {
   }
 
   deleteFavorite(path: string, id: string) {
-    const checkFavorite = this.favorites[path + 's'].includes(id);
+    const checkFavorite: boolean = this.favorites[path + 's'].includes(id);
 
     if (checkFavorite) {
       this.favorites[path + 's'] = this.favorites[path + 's'].filter(
