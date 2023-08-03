@@ -6,7 +6,7 @@ import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 
 async function bootstrap() {
-  const PORT = Number(process.env.PORT);
+  const PORT = Number(process.env.PORT) || 4000;
   const app = await NestFactory.create(AppModule);
 
   try {
