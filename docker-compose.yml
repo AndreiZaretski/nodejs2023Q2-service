@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+ app:
+  build: .
+  image: andreizaretski/app
+  environment:
+   - PORT=${PORT}
+   - DATABASE_URL=${DATABASE_URL}
+  ports:
+   - ${PORT}:${PORT}
+  
+  volumes:
+      - ./logs:/app/logs
+      - ./src:/app/src 
+  depends_on:
+   - db
+  restart: always
+
+  networks:
+   - my-network
+
+ db:
+  build: ./src/db
+  image: andreizaretski/app-db
+  environment:
+   - POSTGRES_PORT=${POSTGRES_PORT}
+   - POSTGRES_USER=${POSTGRES_USER}
+   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+   - POSTGRES_DB=${POSTGRES_DB}
+  ports:
+   - ${POSTGRES_PORT}:${POSTGRES_PORT}
+  volumes:
+   - db-data:/var/lib/postgresql/data
+   - db-logs:/var/log/postgresql
+  restart: always
+
+  networks:
+  - my-network
+
+volumes:
+  db-data:
+  db-logs:
+
+
+networks:
+  my-network: 
+    driver: bridge

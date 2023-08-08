@@ -8,6 +8,6 @@ COPY package*.json .
 RUN npm install
 COPY . .
 EXPOSE $PORT
-CMD ["npm", "run",  "start"]
+CMD ["npm", "run",  "start:dev"]
 
 
