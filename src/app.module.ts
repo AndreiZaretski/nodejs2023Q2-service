@@ -8,6 +8,7 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { TracksModule } from './tracks/tracks.module';
 import { UsersModule } from './users/users.module';
 import { DbModule } from './db/db.module';
+import { PrismaDbModule } from './prisma-db/prisma-db.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DbModule } from './db/db.module';
     UsersModule,
     DbModule,
     ConfigModule.forRoot({ envFilePath: '.env' }),
+    PrismaDbModule,
   ],
   controllers: [AppController],
   providers: [AppService],

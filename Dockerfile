@@ -1,13 +1,14 @@
-FROM node:18-alpine
+FROM node:20-alpine3.18
 
 ARG PORT
 ENV PORT=$PORT
 WORKDIR  /app
 COPY package*.json .
 
-RUN npm install
+RUN npm ci && npm cache clean --force
 COPY . .
+RUN npx prisma generate
 EXPOSE $PORT
-CMD ["npm", "run",  "start:dev"]
+CMD ["npm", "run",  "start:prisma"]
 
-
+# && npm cache clean --force

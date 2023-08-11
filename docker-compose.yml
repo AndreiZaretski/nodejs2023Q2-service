@@ -20,13 +20,15 @@ services:
    - my-network
 
  db:
-  build: ./src/db
+  build: ./src/prisma-db
   image: andreizaretski/app-db
+  container_name: ${POSTGRES_CONTAINER}
   environment:
    - POSTGRES_PORT=${POSTGRES_PORT}
    - POSTGRES_USER=${POSTGRES_USER}
    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
    - POSTGRES_DB=${POSTGRES_DB}
+   - POSTGRES_CONTAINER=${POSTGRES_CONTAINER}
   ports:
    - ${POSTGRES_PORT}:${POSTGRES_PORT}
   volumes:
