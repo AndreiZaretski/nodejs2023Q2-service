@@ -26,17 +26,17 @@ export class AlbumsController {
       forbidNonWhitelisted: true,
     }),
   )
-  create(@Body() createAlbumDto: CreateAlbumDto) {
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.albumsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.albumsService.findOne(id);
   }
 
@@ -47,7 +47,7 @@ export class AlbumsController {
       forbidNonWhitelisted: true,
     }),
   )
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
@@ -56,7 +56,7 @@ export class AlbumsController {
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.albumsService.remove(id);
   }
 }

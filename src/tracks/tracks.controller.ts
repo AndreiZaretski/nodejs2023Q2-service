@@ -26,17 +26,17 @@ export class TracksController {
       forbidNonWhitelisted: true,
     }),
   )
-  create(@Body() createTrackDto: CreateTrackDto) {
+  async create(@Body() createTrackDto: CreateTrackDto) {
     return this.tracksService.create(createTrackDto);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.tracksService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.tracksService.findOne(id);
   }
 
@@ -47,7 +47,7 @@ export class TracksController {
       forbidNonWhitelisted: true,
     }),
   )
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
@@ -56,7 +56,7 @@ export class TracksController {
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.tracksService.remove(id);
   }
 }
