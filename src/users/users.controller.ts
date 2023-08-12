@@ -11,11 +11,15 @@ import {
   ParseUUIDPipe,
   HttpCode,
   InternalServerErrorException,
+  // ClassSerializerInterceptor,
+  // UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
+//@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -28,17 +32,27 @@ export class UsersController {
     }),
   )
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.create(createUserDto);
+    const user = await this.usersService.create(createUserDto);
+
+    return new User(user);
   }
+
+  //console.log('cho za huinz', new User(user));
 
   @Get()
   async findAll() {
-    return await this.usersService.findAll();
+    const users = await this.usersService.findAll();
+    const correctUsers = users.map((user) => new User(user));
+    return correctUsers;
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.usersService.findOne(id);
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+    return new User(user);
   }
 
   @Put(':id')
@@ -56,7 +70,7 @@ export class UsersController {
     if (!user) {
       throw new InternalServerErrorException('Something went wrong');
     }
-    return user;
+    return new User(user);
   }
 
   @Delete(':id')

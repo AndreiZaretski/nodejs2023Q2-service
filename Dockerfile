@@ -5,10 +5,8 @@ ENV PORT=$PORT
 WORKDIR  /app
 COPY package*.json .
 
-RUN npm ci && npm cache clean --force
+RUN npm i && npm cache clean --force
 COPY . .
 RUN npx prisma generate
 EXPOSE $PORT
 CMD ["npm", "run",  "start:prisma"]
-
-# && npm cache clean --force
