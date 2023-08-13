@@ -1,16 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { DbService } from 'src/db/db.service';
 import { PrismaService } from 'src/prisma-db/prisma-db.service';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TracksService {
-  constructor(
-    private db: DbService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(createTrackDto: CreateTrackDto) {
     try {
@@ -72,10 +68,5 @@ export class TracksService {
         return err;
       }
     }
-
-    // const favorites = this.db.getAllFavorites();
-    // const newFavArtists = favorites.tracks.filter((item) => item! == id);
-    // favorites.artists = newFavArtists;
-    // return removeTrack;
   }
 }
