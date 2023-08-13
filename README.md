@@ -17,10 +17,31 @@ git clone https://github.com/AndreiZaretski/nodejs2023Q2-service.git
 npm install
 ```
 
-## Running application
+## Starting application with Docker
 
 ```
-npm start
+Docker compose up
+```
+
+## Stopping application with Docker
+
+```
+Docker compose down
+```
+
+## Scan vulnerabilities images
+
+```
+npm run scan
+```
+## For create prisma migrations run the next command in terminal
+
+```
+rm  ./prisma/migrations
+```
+
+```
+npm run prisma:migrate
 ```
 
 After starting the app on port (4000 as default) you can open
