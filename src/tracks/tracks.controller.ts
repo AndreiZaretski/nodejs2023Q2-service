@@ -27,17 +27,17 @@ export class TracksController {
     }),
   )
   async create(@Body() createTrackDto: CreateTrackDto) {
-    return this.tracksService.create(createTrackDto);
+    return await this.tracksService.create(createTrackDto);
   }
 
   @Get()
   async findAll() {
-    return this.tracksService.findAll();
+    return await this.tracksService.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.tracksService.findOne(id);
+    return await this.tracksService.findOne(id);
   }
 
   @Put(':id')
@@ -51,12 +51,12 @@ export class TracksController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    return this.tracksService.update(updateTrackDto, id);
+    return await this.tracksService.update(updateTrackDto, id);
   }
 
   @Delete(':id')
   @HttpCode(204)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.tracksService.remove(id);
+    return await this.tracksService.remove(id);
   }
 }

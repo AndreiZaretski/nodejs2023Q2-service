@@ -51,12 +51,12 @@ export class ArtistsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
-    return this.artistsService.update(updateArtistDto, id);
+    return await this.artistsService.update(updateArtistDto, id);
   }
 
   @Delete(':id')
   @HttpCode(204)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.artistsService.remove(id);
+    return await this.artistsService.remove(id);
   }
 }
