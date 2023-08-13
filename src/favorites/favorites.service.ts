@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -7,7 +8,6 @@ import {
 import { Prisma } from '@prisma/client';
 import { Album } from 'src/albums/entities/album.entity';
 import { Artist } from 'src/artists/entities/artist.entity';
-import { DbService } from 'src/db/db.service';
 import { PrismaService } from 'src/prisma-db/prisma-db.service';
 import { Track } from 'src/tracks/entities/track.entity';
 
@@ -19,10 +19,7 @@ export interface FavoritesResponse {
 
 @Injectable()
 export class FavoritesService {
-  constructor(
-    private db: DbService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async findAll() {
     const favoritesResponse: FavoritesResponse = {
@@ -68,7 +65,7 @@ export class FavoritesService {
           });
           return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
         } catch (err) {
-          return this.getError(err, path, id);
+          this.getError(err, path, id);
         }
 
       case 'album':
@@ -78,7 +75,7 @@ export class FavoritesService {
           });
           return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
         } catch (err) {
-          return this.getError(err, path, id);
+          this.getError(err, path, id);
         }
 
       case 'track':
@@ -88,7 +85,7 @@ export class FavoritesService {
           });
           return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
         } catch (err) {
-          return this.getError(err, path, id);
+          this.getError(err, path, id);
         }
 
       default:
@@ -108,7 +105,7 @@ export class FavoritesService {
 
           return true;
         } catch (err) {
-          return this.getErrorRemove(err, path, id);
+          this.getErrorRemove(err, path, id);
         }
 
       case 'album':
@@ -119,7 +116,7 @@ export class FavoritesService {
 
           return true;
         } catch (err) {
-          return this.getErrorRemove(err, path, id);
+          this.getErrorRemove(err, path, id);
         }
 
       case 'track':
@@ -130,7 +127,7 @@ export class FavoritesService {
 
           return true;
         } catch (err) {
-          return this.getErrorRemove(err, path, id);
+          this.getErrorRemove(err, path, id);
         }
 
       default:
@@ -143,13 +140,18 @@ export class FavoritesService {
       err instanceof Prisma.PrismaClientKnownRequestError &&
       err.code === 'P2003'
     ) {
-      //console.log('states', err.message);
       throw new UnprocessableEntityException(
         `${path.toLocaleUpperCase()} with id ${id} doesn't exist`,
       );
+    } else if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2002'
+    ) {
+      throw new ConflictException(
+        `${path.toLocaleUpperCase()} with id ${id} already exists in favorites`,
+      );
     } else {
-      console.log('states', err.message);
-      return err;
+      throw err;
     }
   }
 
@@ -162,7 +164,7 @@ export class FavoritesService {
         `${path.toLocaleUpperCase()} with id ${id} doesn't exist in favorites`,
       );
     } else {
-      return err;
+      throw err;
     }
   }
 }

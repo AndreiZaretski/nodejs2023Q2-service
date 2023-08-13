@@ -7,7 +7,6 @@ import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { TracksModule } from './tracks/tracks.module';
 import { UsersModule } from './users/users.module';
-import { DbModule } from './db/db.module';
 import { PrismaDbModule } from './prisma-db/prisma-db.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
@@ -18,7 +17,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     FavoritesModule,
     TracksModule,
     UsersModule,
-    DbModule,
     ConfigModule.forRoot({ envFilePath: '.env' }),
     PrismaDbModule,
   ],

@@ -43,7 +43,7 @@ export class ArtistsService {
       ) {
         throw new NotFoundException(`Artist with id ${id} doesn't exist`);
       } else {
-        return err;
+        throw err;
       }
     }
   }
@@ -61,29 +61,8 @@ export class ArtistsService {
       ) {
         throw new NotFoundException(`Artist with id ${id} doesn't exist`);
       } else {
-        return err;
+        throw err;
       }
     }
-
-    // const tracks = this.db.getTrackDb();
-    // tracks.forEach((item, key) => {
-    //   if (item.artistId === id) {
-    //     item.artistId = null;
-    //     tracks.set(key, item);
-    //   }
-    // });
-
-    // const albums = this.db.getAlbumDb();
-    // albums.forEach((item, key) => {
-    //   if (item.artistId === id) {
-    //     item.artistId = null;
-    //     albums.set(key, item);
-    //   }
-    // });
-
-    // const favorites = this.db.getAllFavorites();
-    // const newFavArtists = favorites.artists.filter((item) => item! == id);
-    // favorites.artists = newFavArtists;
-    // return removeArtist;
   }
 }
