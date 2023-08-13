@@ -62,59 +62,35 @@ export class FavoritesService {
 
     switch (path) {
       case 'artist':
-        const artist = await this.prisma.artist.findUnique({
-          where: { id: id },
-        });
-        if (!artist) {
-          throw new UnprocessableEntityException(
-            `${path.toLocaleUpperCase()} with id ${id} doesn't exist`,
-          );
-        }
         try {
           await this.prisma.favArtist.create({
             data: { artistId: id },
           });
+          return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
         } catch (err) {
-          return err;
+          return this.getError(err, path, id);
         }
 
-        return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
       case 'album':
-        const album = await this.prisma.album.findUnique({
-          where: { id: id },
-        });
-        if (!album) {
-          throw new UnprocessableEntityException(
-            `${path.toLocaleUpperCase()} with id ${id} doesn't exist`,
-          );
-        }
         try {
           await this.prisma.favAlbum.create({
             data: { albumId: id },
           });
+          return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
         } catch (err) {
-          return err;
+          return this.getError(err, path, id);
         }
 
-        return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
       case 'track':
-        const track = await this.prisma.track.findUnique({
-          where: { id: id },
-        });
-        if (!track) {
-          throw new UnprocessableEntityException(
-            `${path.toLocaleUpperCase()} with id ${id} doesn't exist`,
-          );
-        }
         try {
           await this.prisma.favTrack.create({
             data: { trackId: id },
           });
+          return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
         } catch (err) {
-          return err;
+          return this.getError(err, path, id);
         }
 
-        return `${path.toLocaleUpperCase()} with id ${id} was added to favorites`;
       default:
         throw new BadRequestException(`Invalid path: ${path}`);
     }
@@ -132,16 +108,7 @@ export class FavoritesService {
 
           return true;
         } catch (err) {
-          if (
-            err instanceof Prisma.PrismaClientKnownRequestError &&
-            err.code === 'P2025'
-          ) {
-            throw new NotFoundException(
-              `${path.toLocaleUpperCase()} with id ${id} doesn't exist in favorites`,
-            );
-          } else {
-            return err;
-          }
+          return this.getErrorRemove(err, path, id);
         }
 
       case 'album':
@@ -152,16 +119,7 @@ export class FavoritesService {
 
           return true;
         } catch (err) {
-          if (
-            err instanceof Prisma.PrismaClientKnownRequestError &&
-            err.code === 'P2025'
-          ) {
-            throw new NotFoundException(
-              `${path.toLocaleUpperCase()} with id ${id} doesn't exist in favorites`,
-            );
-          } else {
-            return err;
-          }
+          return this.getErrorRemove(err, path, id);
         }
 
       case 'track':
@@ -172,20 +130,39 @@ export class FavoritesService {
 
           return true;
         } catch (err) {
-          if (
-            err instanceof Prisma.PrismaClientKnownRequestError &&
-            err.code === 'P2025'
-          ) {
-            throw new NotFoundException(
-              `${path.toLocaleUpperCase()} with id ${id} doesn't exist in favorites`,
-            );
-          } else {
-            return err;
-          }
+          return this.getErrorRemove(err, path, id);
         }
 
       default:
         throw new BadRequestException(`Invalid path: ${path}`);
+    }
+  }
+
+  private getError(err: Error, path: string, id: string) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2003'
+    ) {
+      //console.log('states', err.message);
+      throw new UnprocessableEntityException(
+        `${path.toLocaleUpperCase()} with id ${id} doesn't exist`,
+      );
+    } else {
+      console.log('states', err.message);
+      return err;
+    }
+  }
+
+  private getErrorRemove(err: Error, path: string, id: string) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2025'
+    ) {
+      throw new NotFoundException(
+        `${path.toLocaleUpperCase()} with id ${id} doesn't exist in favorites`,
+      );
+    } else {
+      return err;
     }
   }
 }
