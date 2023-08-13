@@ -37,8 +37,6 @@ export class UsersController {
     return new User(user);
   }
 
-  //console.log('cho za huinz', new User(user));
-
   @Get()
   async findAll() {
     const users = await this.usersService.findAll();
