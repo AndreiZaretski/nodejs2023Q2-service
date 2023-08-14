@@ -8,9 +8,9 @@ export class User {
   password: string;
   version: number; // integer number, increments on update
 
-  @Transform(({ value }) => new Date(value).getTime())
+  @Transform(({ value }) => value.getTime())
   createdAt: number | Date; // timestamp of creation
-  @Transform(({ value }) => new Date(value).getTime())
+  @Transform(({ value }) => value.getTime())
   updatedAt: number | Date; // timestamp of last update
 
   constructor(partial: Partial<User>) {

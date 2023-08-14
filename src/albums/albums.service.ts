@@ -15,7 +15,6 @@ export class AlbumsService {
       });
     } catch (err) {
       throw err;
-      //return err;
     }
   }
 
@@ -66,7 +65,6 @@ export class AlbumsService {
       ) {
         throw new NotFoundException(`Album with id ${id} doesn't exist`);
       } else {
-        //throw err;
         return false;
       }
     }
