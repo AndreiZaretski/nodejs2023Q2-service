@@ -26,7 +26,7 @@ Install the desktop version of docker and run it on your computer
 Run the following command in terminal
 
 ```
-Docker compose up
+docker-compose up
 ```
 
 ## Stopping application with Docker
@@ -34,7 +34,7 @@ Docker compose up
 Run the following command in terminal
 
 ```
-Docker compose down
+docker-compose down
 ```
 
 ## Scan vulnerabilities images
@@ -52,6 +52,18 @@ rm -r ./prisma/migrations
 
 ```
 npm run prisma:migrate
+```
+
+## For clean clean docker cache run the next commands in terminal
+
+```
+docker builder prune  
+```
+  or
+
+```
+docker system prune
+
 ```
 
 After starting the app on port (4000 as default) you can open
