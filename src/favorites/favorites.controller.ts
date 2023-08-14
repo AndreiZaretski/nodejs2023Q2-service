@@ -14,18 +14,24 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
-  findAll() {
-    return this.favoritesService.findAll();
+  async findAll() {
+    return await this.favoritesService.findAll();
   }
 
   @Post(':path/:id')
-  create(@Param('path') path: string, @Param('id', ParseUUIDPipe) id: string) {
-    return this.favoritesService.create(path, id);
+  async create(
+    @Param('path') path: string,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
+    return await this.favoritesService.create(path, id);
   }
 
   @Delete(':path/:id')
   @HttpCode(204)
-  remove(@Param('path') path: string, @Param('id', ParseUUIDPipe) id: string) {
-    return this.favoritesService.remove(path, id);
+  async remove(
+    @Param('path') path: string,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
+    return await this.favoritesService.remove(path, id);
   }
 }

@@ -17,10 +17,53 @@ git clone https://github.com/AndreiZaretski/nodejs2023Q2-service.git
 npm install
 ```
 
-## Running application
+## Starting application with Docker
+
+Install the desktop version of docker and run it on your computer
+
+[Docker desktop](https://docs.docker.com/engine/install/)
+
+Run the following command in terminal
 
 ```
-npm start
+docker-compose up
+```
+
+## Stopping application with Docker
+
+Run the following command in terminal
+
+```
+docker-compose down
+```
+
+## Scan vulnerabilities images
+
+Run the following command in terminal
+
+```
+npm run scan
+```
+## For create prisma migrations run the next commands in terminal
+
+```
+rm -r ./prisma/migrations
+```
+
+```
+npm run prisma:migrate
+```
+
+## For clean clean docker cache run the next commands in terminal
+
+```
+docker builder prune  
+```
+  or
+
+```
+docker system prune
+
 ```
 
 After starting the app on port (4000 as default) you can open

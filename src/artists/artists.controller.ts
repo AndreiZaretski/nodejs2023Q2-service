@@ -47,16 +47,16 @@ export class ArtistsController {
       forbidNonWhitelisted: true,
     }),
   )
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
-    return this.artistsService.update(updateArtistDto, id);
+    return await this.artistsService.update(updateArtistDto, id);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.artistsService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.artistsService.remove(id);
   }
 }
