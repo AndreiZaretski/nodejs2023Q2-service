@@ -19,11 +19,19 @@ npm install
 
 ## Starting application with Docker
 
+Install the desktop version of docker and run it on your computer
+
+[Docker desktop](https://docs.docker.com/engine/install/)
+
+Run the following command in terminal
+
 ```
 Docker compose up
 ```
 
 ## Stopping application with Docker
+
+Run the following command in terminal
 
 ```
 Docker compose down
@@ -31,13 +39,15 @@ Docker compose down
 
 ## Scan vulnerabilities images
 
+Run the following command in terminal
+
 ```
 npm run scan
 ```
-## For create prisma migrations run the next command in terminal
+## For create prisma migrations run the next commands in terminal
 
 ```
-rm  ./prisma/migrations
+rm -r ./prisma/migrations
 ```
 
 ```
