@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -13,11 +14,24 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.prisma.user.create({
-      data: createUserDto,
-    });
+    try {
+      const user = await this.prisma.user.create({
+        data: createUserDto,
+      });
 
-    return user;
+      return user;
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          `User with login ${createUserDto.login} already exists in favorites`,
+        );
+      } else {
+        throw err;
+      }
+    }
   }
 
   async findAll() {
