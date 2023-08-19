@@ -8,15 +8,25 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma-db/prisma-db.service';
 import { Prisma } from '@prisma/client';
+import { BcryptService } from './bcrypt.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private bcrypt: BcryptService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     try {
+      const hashedPassword = await this.bcrypt.hashPassword(
+        createUserDto.password,
+      );
       const user = await this.prisma.user.create({
-        data: createUserDto,
+        data: {
+          ...createUserDto,
+          password: hashedPassword,
+        },
       });
 
       return user;
@@ -26,7 +36,7 @@ export class UsersService {
         err.code === 'P2002'
       ) {
         throw new ConflictException(
-          `User with login ${createUserDto.login} already exists in favorites`,
+          `User with login ${createUserDto.login} already exists in users`,
         );
       } else {
         throw err;
@@ -56,14 +66,26 @@ export class UsersService {
       throw new NotFoundException(`User with id ${id} doesn't exist`);
     }
 
-    if (checkUser.password !== updateUserDto.oldPassword) {
+    // if (checkUser.password !== updateUserDto.oldPassword) {
+    //   throw new ForbiddenException('OldPassword is wrong');
+    // }
+
+    const isMatch = await this.bcrypt.comparePassword(
+      updateUserDto.oldPassword,
+      checkUser.password,
+    );
+    if (!isMatch) {
       throw new ForbiddenException('OldPassword is wrong');
     }
+
     try {
+      const hashedPassword = await this.bcrypt.hashPassword(
+        updateUserDto.newPassword,
+      );
       const updateUser = await this.prisma.user.update({
         where: { id: id },
         data: {
-          password: updateUserDto.newPassword,
+          password: hashedPassword,
           version: { increment: 1 },
         },
       });
