@@ -7,7 +7,13 @@ import {
 import { JwtService } from '@nestjs/jwt';
 //import { Observable } from 'rxjs';
 
-const skipPaths = [/^\/auth\/signup$/, /^\/auth\/login$/, /^\/doc$/, /^\/$/];
+const skipPaths = [
+  /^\/auth\/signup$/,
+  /^\/auth\/login$/,
+  /^\/auth\/refresh$/,
+  /^\/doc$/,
+  /^\/$/,
+];
 
 @Injectable()
 export class AuthGuard implements CanActivate {
