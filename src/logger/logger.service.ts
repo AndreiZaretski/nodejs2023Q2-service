@@ -3,7 +3,13 @@ import { Injectable, LogLevel, LoggerService } from '@nestjs/common';
 @Injectable()
 export class CustomLogger implements LoggerService {
   log(message: any, ...optionalParams: any[]) {
-    console.log('\x1b[1m\x1b[32m' + 'log', message, '\x1b[0m', optionalParams);
+    console.log(
+      '\x1b[1m\x1b[32m' + 'log\n',
+      '\x1b[1m\x1b[32m',
+      message,
+      optionalParams,
+      '\x1b[0m',
+    );
   }
   error(message: any, ...optionalParams: any[]) {
     console.error(

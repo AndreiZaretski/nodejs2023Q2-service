@@ -6,6 +6,7 @@ import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import { CustomLogger } from './logger/logger.service';
 import { CustomExceptionFilter } from './logger/exeption-filter';
+import { LoggerInterceptor } from './logger/logger.interceptor';
 
 async function bootstrap() {
   const PORT = Number(process.env.PORT) || 4000;
@@ -24,6 +25,7 @@ async function bootstrap() {
   }
   const logger = app.get(CustomLogger);
   app.useLogger(logger);
+  app.useGlobalInterceptors(new LoggerInterceptor(logger));
   app.useGlobalFilters(new CustomExceptionFilter(logger));
 
   await app.listen(PORT, () => {
