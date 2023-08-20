@@ -25,6 +25,7 @@ export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    //throw new Error();
     const request = context.switchToHttp().getRequest();
     const path = request.path;
     for (const regex of skipPaths) {

@@ -5,6 +5,7 @@ import * as yaml from 'js-yaml';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import { CustomLogger } from './logger/logger.service';
+import { CustomExceptionFilter } from './logger/exeption-filter';
 
 async function bootstrap() {
   const PORT = Number(process.env.PORT) || 4000;
@@ -21,8 +22,9 @@ async function bootstrap() {
   } catch (e) {
     console.error(e.message);
   }
-
-  app.useLogger(app.get(CustomLogger));
+  const logger = app.get(CustomLogger);
+  app.useLogger(logger);
+  app.useGlobalFilters(new CustomExceptionFilter(logger));
 
   await app.listen(PORT, () => {
     console.log(`Server listen on port ${PORT}`);
