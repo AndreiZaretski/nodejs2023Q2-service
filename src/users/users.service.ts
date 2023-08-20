@@ -58,6 +58,12 @@ export class UsersService {
     return user;
   }
 
+  async findOneByLogin(login: string) {
+    return await this.prisma.user.findUnique({
+      where: { login: login },
+    });
+  }
+
   async update(updateUserDto: UpdateUserDto, id: string) {
     const checkUser = await this.prisma.user.findUnique({
       where: { id: id },
@@ -65,10 +71,6 @@ export class UsersService {
     if (!checkUser) {
       throw new NotFoundException(`User with id ${id} doesn't exist`);
     }
-
-    // if (checkUser.password !== updateUserDto.oldPassword) {
-    //   throw new ForbiddenException('OldPassword is wrong');
-    // }
 
     const isMatch = await this.bcrypt.comparePassword(
       updateUserDto.oldPassword,
