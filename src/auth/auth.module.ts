@@ -6,6 +6,7 @@ import { BcryptService } from 'src/users/bcrypt.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { RefreshGuard } from './refresh.guard';
 
 @Module({
   controllers: [AuthController],
@@ -20,11 +21,11 @@ import { APP_GUARD } from '@nestjs/core';
     AuthService,
     UsersService,
     BcryptService,
+    RefreshGuard,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
   ],
-  //exports: [AuthGuard],
 })
 export class AuthModule {}

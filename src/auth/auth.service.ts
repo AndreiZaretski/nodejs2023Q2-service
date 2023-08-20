@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { BcryptService } from 'src/users/bcrypt.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -56,14 +52,6 @@ export class AuthService {
   }
 
   async refresh(refreshDto: RefreshDto) {
-    console.log(refreshDto);
-    if (
-      !refreshDto.refreshToken ||
-      typeof refreshDto.refreshToken !== 'string'
-    ) {
-      throw new UnauthorizedException('User is not authorized');
-    }
-
     try {
       const payload = await this.jwtService.verifyAsync(
         refreshDto.refreshToken,
@@ -88,8 +76,7 @@ export class AuthService {
       };
     } catch (err) {
       throw new ForbiddenException({
-        message: `Refresh token is invalid or expired or this other error`,
-        //err.message,
+        message: `Refresh token is invalid or expired or this other error.  ${err.message}`,
       });
     }
   }

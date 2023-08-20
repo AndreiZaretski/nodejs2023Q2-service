@@ -25,7 +25,14 @@ export class CustomExceptionFilter implements ExceptionFilter {
         path: request.url,
       });
 
-      this.customLogger.error(message, exception.stack);
+      this.customLogger.error(
+        JSON.stringify({
+          statusCode: status,
+          message: message,
+          timestamp: new Date().toISOString(),
+          path: request.url,
+        }),
+      );
     } else {
       response.status(500).json({
         statusCode: 500,
