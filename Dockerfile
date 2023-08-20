@@ -7,6 +7,5 @@ COPY package*.json .
 
 RUN npm i && npm cache clean --force
 COPY . .
-RUN npx prisma generate
 EXPOSE $PORT
 CMD ["npm", "run",  "start:prisma"]
