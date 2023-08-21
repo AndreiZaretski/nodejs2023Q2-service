@@ -12,18 +12,17 @@ import { mkdirSync } from 'fs';
 export class CustomLogger extends ConsoleLogger implements LoggerService {
   private logLevel: number;
   private logFileSize: number;
-  private logFileName: string = 'log.txt';
-  private errorFileName: string = 'error.log';
+  private logFileName: string = 'log';
+  private errorFileName: string = 'error';
+  private fileEx: string = '.txt';
 
   constructor() {
     super();
     this.logLevel = +(process.env.LOG_LEVEL || 2);
-    this.logFileSize = +(process.env.LOG_FILE_SIZE || 18);
-    this.log('EnvFiles', this.logLevel, this.logFileSize);
-    this.options = { logLevels: this.logLevelArray(this.logLevel) };
+    this.logFileSize = +(process.env.LOG_FILE_SIZE || 18) * 1024;
 
-    this.logFileName = 'log.txt';
-    this.errorFileName = 'error.log';
+    this.options = { logLevels: this.logLevelArray(this.logLevel) };
+    this.log('EnvFiles', this.logLevel, this.logFileSize);
 
     mkdirSync(path.resolve('logs'), { recursive: true });
   }
@@ -124,9 +123,11 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
     message: any,
     ...optionalParams: any[]
   ) {
+    await this.rotateFile(fileName);
+
     const data = this.createBufferData(message, ...optionalParams);
     try {
-      await fs.appendFile(path.resolve('logs', fileName), data);
+      await fs.appendFile(path.resolve('logs', fileName + this.fileEx), data);
     } catch (err) {
       throw err;
     }
@@ -138,5 +139,31 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
       Buffer.from(message + '\n', 'utf8'),
       ...optionalParams.map((param: any) => Buffer.from(param + '\n', 'utf8')),
     ]);
+  }
+
+  private async rotateFile(fileName: string) {
+    try {
+      const stats = await fs.stat(path.resolve('logs', fileName + this.fileEx));
+      if (stats.size > this.logFileSize) {
+        console.log('sizee', stats.size, this.logFileSize);
+        const newName = fileName + '-' + Date.now();
+        // await fs.rename(path.resolve('logs', fileName), newName);
+        // await fs.writeFile(path.resolve('logs', fileName), '');
+        await fs.copyFile(
+          path.resolve('logs', fileName + this.fileEx),
+          path.resolve('logs', newName + this.fileEx),
+        );
+        //await fs.unlink(path.resolve('logs', fileName));
+        await fs.writeFile(path.resolve('logs', fileName + this.fileEx), '', {
+          flag: 'w',
+        });
+      }
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        console.log('grtt', err.code, err.message);
+        return;
+      }
+      throw err;
+    }
   }
 }
