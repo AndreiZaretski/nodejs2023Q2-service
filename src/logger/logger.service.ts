@@ -10,10 +10,10 @@ import { mkdirSync } from 'fs';
 
 @Injectable()
 export class CustomLogger extends ConsoleLogger implements LoggerService {
-  logLevel: number;
-  logFileSize: number;
-  logFileName: string;
-  errorFileName: string;
+  private logLevel: number;
+  private logFileSize: number;
+  private logFileName: string = 'log.txt';
+  private errorFileName: string = 'error.log';
 
   constructor() {
     super();
