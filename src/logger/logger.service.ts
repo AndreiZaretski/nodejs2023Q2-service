@@ -145,7 +145,7 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
     try {
       const stats = await fs.stat(path.resolve('logs', fileName + this.fileEx));
       if (stats.size > this.logFileSize) {
-        console.log('sizee', stats.size, this.logFileSize);
+        //console.log('sizee', stats.size, this.logFileSize);
         const newName = fileName + '-' + Date.now();
         // await fs.rename(path.resolve('logs', fileName), newName);
         // await fs.writeFile(path.resolve('logs', fileName), '');
@@ -160,7 +160,7 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
       }
     } catch (err) {
       if (err.code === 'ENOENT') {
-        console.log('grtt', err.code, err.message);
+        //console.log('grtt', err.code, err.message);
         return;
       }
       throw err;
