@@ -32,6 +32,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
           timestamp: new Date().toISOString(),
           path: request.url,
         }),
+        //exception.stack,
       );
       //this.customLogger.error(exception.message, exception.stack);
     } else {

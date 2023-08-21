@@ -61,10 +61,11 @@ async function bootstrap() {
   // rejectedPromise.then((value) => {
   //   value;
   // });
+
+  logger.error('error');
+  logger.warn('warn');
+  logger.log('log');
+  logger.verbose('verbose');
+  logger.debug('debug');
 }
 bootstrap();
-//.catch((error) => {
-//logger.error(error.message);
-//throw error;
-//console.log('fre', error);
-//});

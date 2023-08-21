@@ -40,8 +40,8 @@ export class LoggerInterceptor implements NestInterceptor {
           request: {
             method: method,
             url: url,
-            query: JSON.stringify(query),
-            body: JSON.stringify(reqBody),
+            query: query,
+            body: reqBody,
             initTime: now,
           },
           response: {
