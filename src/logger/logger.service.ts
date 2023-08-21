@@ -4,11 +4,16 @@ import {
   LogLevel,
   LoggerService,
 } from '@nestjs/common';
+import * as path from 'path';
+import * as fs from 'fs/promises';
+import { mkdirSync } from 'fs';
 
 @Injectable()
 export class CustomLogger extends ConsoleLogger implements LoggerService {
   logLevel: number;
   logFileSize: number;
+  logFileName: string;
+  errorFileName: string;
 
   constructor() {
     super();
@@ -16,6 +21,11 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
     this.logFileSize = +(process.env.LOG_FILE_SIZE || 18);
     this.log('EnvFiles', this.logLevel, this.logFileSize);
     this.options = { logLevels: this.logLevelArray(this.logLevel) };
+
+    this.logFileName = 'log.txt';
+    this.errorFileName = 'error.log';
+
+    mkdirSync(path.resolve('logs'), { recursive: true });
   }
 
   log(message: any, ...optionalParams: any[]) {
@@ -29,18 +39,22 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
       ...optionalParams,
       '\x1b[0m',
     );
+
+    this.writeLogsFile(this.logFileName, message, ...optionalParams);
   }
+
   error(message: any, ...optionalParams: any[]) {
     if (!this.isLevelEnabled('error')) {
       return;
     }
     console.error(
       '\x1b[1m\x1b[31m' + 'error',
-      '\x1b[1m\x1b[32m',
+      '\x1b[1m\x1b[31m',
       message,
       ...optionalParams,
       '\x1b[0m',
     );
+    this.writeLogsFile(this.errorFileName, message, ...optionalParams);
   }
   warn(message: any, ...optionalParams: any[]) {
     if (!this.isLevelEnabled('warn')) {
@@ -48,11 +62,12 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
     }
     console.warn(
       '\x1b[1m\x1b[33m' + 'warn',
-      '\x1b[1m\x1b[32m',
+      '\x1b[1m\x1b[33m',
       message,
       ...optionalParams,
       '\x1b[0m',
     );
+    this.writeLogsFile(this.logFileName, message, ...optionalParams);
   }
 
   debug(message: any, ...optionalParams: any[]) {
@@ -61,11 +76,12 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
     }
     console.debug(
       '\x1b[1m\x1b[35m' + 'debug',
-      '\x1b[1m\x1b[32m',
+      '\x1b[1m\x1b[35m',
       message,
       ...optionalParams,
       '\x1b[0m',
     );
+    this.writeLogsFile(this.logFileName, message, ...optionalParams);
   }
 
   verbose(message: any, ...optionalParams: any[]) {
@@ -79,6 +95,7 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
       ...optionalParams,
       '\x1b[0m',
     );
+    this.writeLogsFile(this.logFileName, message, ...optionalParams);
   }
 
   private logLevelArray(level: number): LogLevel[] {
@@ -100,5 +117,26 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
 
     return ['error', 'warn', 'log'];
     //return undefined;
+  }
+
+  private async writeLogsFile(
+    fileName: string,
+    message: any,
+    ...optionalParams: any[]
+  ) {
+    const data = this.createBufferData(message, ...optionalParams);
+    try {
+      await fs.appendFile(path.resolve('logs', fileName), data);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  private createBufferData(message: any, ...optionalParams: any[]) {
+    return Buffer.concat([
+      Buffer.from(new Date().toISOString() + '\n', 'utf8'),
+      Buffer.from(message + '\n', 'utf8'),
+      ...optionalParams.map((param: any) => Buffer.from(param + '\n', 'utf8')),
+    ]);
   }
 }
