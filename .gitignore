@@ -3,7 +3,8 @@
 /node_modules
 
 # Logs
-logs
+logs/*
+!logs/test.txt
 *.log
 npm-debug.log*
 pnpm-debug.log*

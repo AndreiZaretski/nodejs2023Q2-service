@@ -9,6 +9,8 @@ import { TracksModule } from './tracks/tracks.module';
 import { UsersModule } from './users/users.module';
 import { PrismaDbModule } from './prisma-db/prisma-db.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggerModule } from './logger/logger.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,8 +19,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     FavoritesModule,
     TracksModule,
     UsersModule,
-    ConfigModule.forRoot({ envFilePath: '.env' }),
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     PrismaDbModule,
+    LoggerModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
