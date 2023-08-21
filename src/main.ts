@@ -37,7 +37,6 @@ async function bootstrap() {
       origin,
       'error',
     );
-    throw err;
   });
 
   process.on('unhandledRejection', (reason, promise) => {
@@ -55,6 +54,7 @@ async function bootstrap() {
   // });
 
   //For check unhandledRejection listener uncomment the code below
+
   // const rejectedPromise = new Promise((resolve, reject) => {
   //   reject(new Error('This is a rejected promise'));
   // });

@@ -22,7 +22,7 @@ export class CustomLogger extends ConsoleLogger implements LoggerService {
     this.logFileSize = +(process.env.LOG_FILE_SIZE || 18) * 1024;
 
     this.options = { logLevels: this.logLevelArray(this.logLevel) };
-    this.log('EnvFiles', this.logLevel, this.logFileSize);
+    this.log('EnvFiles', this.logLevel, this.logFileSize / 1024);
 
     mkdirSync(path.resolve('logs'), { recursive: true });
   }
