@@ -214,12 +214,11 @@ paths:
                   minLength: 3
                   maxLength: 1255
                   description: RefreshToken
-              # required:
-              #   - login
-              #   - password
       responses:
         200:
           description: Successful signup
+        400:
+          description: Body request contains extra fields
         401:
           description: User is not authorized
         403:

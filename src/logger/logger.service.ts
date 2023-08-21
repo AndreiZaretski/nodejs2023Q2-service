@@ -7,7 +7,7 @@ export class CustomLogger implements LoggerService {
       '\x1b[1m\x1b[32m' + 'log\n',
       '\x1b[1m\x1b[32m',
       message,
-      optionalParams,
+      ...optionalParams,
       '\x1b[0m',
     );
   }
@@ -15,25 +15,15 @@ export class CustomLogger implements LoggerService {
     console.error(
       '\x1b[1m\x1b[31m' + 'error',
       message,
-      optionalParams,
+      ...optionalParams,
       '\x1b[0m',
     );
   }
   warn(message: any, ...optionalParams: any[]) {
-    console.warn(
-      '\x1b[1m\x1b[33m' + 'warn',
-      message,
-      optionalParams,
-      '\x1b[0m',
-    );
+    console.warn('\x1b[1m\x1b[33m' + 'warn', message, ...optionalParams);
   }
   debug?(message: any, ...optionalParams: any[]) {
-    console.debug(
-      '\x1b[1m\x1b[35m' + 'debug',
-      message,
-      optionalParams,
-      '\x1b[0m',
-    );
+    console.debug('\x1b[1m\x1b[35m' + 'debug', message, ...optionalParams);
   }
   verbose?(message: any, ...optionalParams: any[]) {
     console.log(

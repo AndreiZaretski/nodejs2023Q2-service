@@ -39,7 +39,8 @@ export class LoggerInterceptor implements NestInterceptor {
         const message = JSON.stringify({
           request: {
             method: method,
-            url: `${url} ${JSON.stringify(query)}`,
+            url: url,
+            query: JSON.stringify(query),
             body: JSON.stringify(reqBody),
             initTime: now,
           },

@@ -24,12 +24,47 @@ async function bootstrap() {
     console.error(e.message);
   }
   const logger = app.get(CustomLogger);
+
   app.useLogger(logger);
   app.useGlobalInterceptors(new LoggerInterceptor(logger));
   app.useGlobalFilters(new CustomExceptionFilter(logger));
 
-  await app.listen(PORT, () => {
-    console.log(`Server listen on port ${PORT}`);
+  process.on('uncaughtException', (err, origin) => {
+    logger.error(
+      'Uncaught exception:',
+      err.message,
+      'origin:',
+      origin,
+      'error',
+    );
+    throw err;
   });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  });
+
+  await app.listen(PORT, () => {
+    logger.log(`Server listen on port ${PORT}`);
+  });
+
+  //For check uncaughtException listener uncomment the code below
+
+  // setTimeout(() => {
+  //   throw new Error('Uncaught exception');
+  // });
+
+  //For check unhandledRejection listener uncomment the code below
+  // const rejectedPromise = new Promise((resolve, reject) => {
+  //   reject(new Error('This is a rejected promise'));
+  // });
+  // rejectedPromise.then((value) => {
+  //   value;
+  // });
 }
 bootstrap();
+//.catch((error) => {
+//logger.error(error.message);
+//throw error;
+//console.log('fre', error);
+//});

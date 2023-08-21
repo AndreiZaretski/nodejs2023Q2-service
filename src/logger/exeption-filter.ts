@@ -33,6 +33,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
           path: request.url,
         }),
       );
+      //this.customLogger.error(exception.message, exception.stack);
     } else {
       response.status(500).json({
         statusCode: 500,
@@ -41,7 +42,16 @@ export class CustomExceptionFilter implements ExceptionFilter {
         path: request.url,
       });
 
-      this.customLogger.error(exception.message, exception.stack);
+      this.customLogger.error(
+        JSON.stringify({
+          statusCode: 500,
+          message:
+            'Something went wrong. We are already working on this issue.',
+          timestamp: new Date().toISOString(),
+          path: request.url,
+        }),
+      );
+      //this.customLogger.error(exception.message, exception.stack);
     }
   }
 }
