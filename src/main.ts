@@ -62,10 +62,10 @@ async function bootstrap() {
   //   value;
   // });
 
-  logger.error('error');
-  logger.warn('warn');
-  logger.log('log');
-  logger.verbose('verbose');
-  logger.debug('debug');
+  // logger.error('error');
+  // logger.warn('warn');
+  // logger.log('log');
+  // logger.verbose('verbose');
+  // logger.debug('debug');
 }
 bootstrap();
